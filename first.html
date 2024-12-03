@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Circular Progress Bar with Labels</title>
+<style>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+  }
+
+  .progress-container {
+    text-align: center;
+  }
+
+  .circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: conic-gradient(#ddd 0%, #ddd 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    animation: buffer-animation 2s ease-in-out forwards;
+    margin: 0 auto;
+  }
+
+  .circle::after {
+    content: '';
+    width: 85%;
+    height: 85%;
+    background-color: #fff;
+    border-radius: 50%;
+    position: absolute;
+  }
+
+  .circle span {
+    font-size: 24px;
+    font-weight: bold;
+    z-index: 1;
+  }
+
+  .label {
+    margin-top: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #666;
+  }
+
+  @keyframes buffer-animation {
+    0% { background: conic-gradient(#4caf50 0%, #ddd 100%); }
+    50% { background: conic-gradient(#4caf50 50%, #ddd 100%); }
+    100% { background: conic-gradient(#4caf50 100%, #ddd 100%); }
+  }
+
+  @keyframes progress-animation {
+    from { background: conic-gradient(#4caf50 0%, #ddd 100%); }
+    to { background: conic-gradient(var(--final-color) calc(var(--percent) * 1%), #ddd calc(var(--percent) * 1%)); }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-container">
+  <div class="circle" style="--percent: 0; --final-color: #4caf50;">
+    <span>0%</span>
+  </div>
+  <div class="label">Loading...</div>
+</div>
+<p id="data3"> {{ accuracy }}%</p>
+<script>
+  function startProgressAnimation(finalPercent) {
+    const circle = document.querySelector('.circle');
+    const label = document.querySelector('.label');
+    const a = document.getElementById('data3')
+    let percent = 0;
+
+    // Buffer Animation (Simulate initial buffering effect)
+    setTimeout(() => {
+      circle.style.animation = 'none'; // Stop buffer animation
+      // Start progress animation
+      circle.style.setProperty('--percent', finalPercent);
+      circle.style.animation = 'progress-animation 2s ease-out forwards';
+      
+      const interval = setInterval(() => {
+        if (percent < finalPercent) {
+          percent++;
+          circle.querySelector('span').textContent = `${percent}%`;
+          label.textContent = getLabelText(percent);
+        } else {
+          clearInterval(interval);
+        }
+      }, 2000 / finalPercent); // Calculate interval time dynamically
+    }, 2000); // End buffer effect after 2 seconds
+  }
+
+  function getLabelText(percent) {
+    if (percent <= 35) {
+      return "Good";
+    } else if (percent <= 80) {
+      return "Very Good";
+    } else {
+      return "Excellent";
+    }
+  }
+
+  // Example usage: animate to 75% after buffering
+  startProgressAnimation(a);
+</script>
+
+</body>
+</html>

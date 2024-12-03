@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Screening</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Upload Your Resume</h1>
+        <form action="/upload" method="post" enctype="multipart/form-data" id="uploadForm">
+            <label for="resume">Resume (PDF/DOCX):</label>
+            <input type="file" name="resume" required>
+            <br>
+            <label for="job_description">Job Description:</label>
+            <textarea name="job_description" required></textarea>
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+        <div id="result"></div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
+
+
